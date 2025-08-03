@@ -1,7 +1,7 @@
 /* Global Styles */
 body {
   font-family: Inter, Inter Fallback;
-  background-color: #121212; /* Dark background color like Discord */
+  background-color: #121212;
   color: #fafafa;
   margin: 0;
   padding: 0;
@@ -16,7 +16,8 @@ a {
 h2 {
   margin-top: 0;
   font-size: 18px;
-  margin-right: 10px; /* Add some space between h2 and the select */
+  margin-right: 10px;
+  line-height: 32px; /* To help with vertical alignment of text */
 }
 
 button {
@@ -46,7 +47,7 @@ button:hover {
 
 .dropdowns {
   display: flex;
-  align-items: center; /* Align dropdowns and headings properly */
+  align-items: center; /* Ensures both <h2> and <select> are vertically centered */
 }
 
 .dropdowns h2 {
@@ -60,7 +61,7 @@ select {
   padding: 8px 16px;
   border-radius: 5px;
   font-size: 14px;
-  width: 160px; /* Adjust width of selects */
+  width: 160px;
   transition: background-color 0.3s;
   margin-right: 20px; /* Space between the selects */
 }
@@ -155,11 +156,13 @@ select:hover {
   width: 48%;
   max-height: 400px;
   overflow-y: auto;
+  flex-grow: 1; /* This ensures the boxes take up all available vertical space */
 }
 
 .series-list h2, .episode-list h2 {
   font-size: 18px;
   color: #b9bbbe;
+  margin-bottom: 10px; /* To add spacing between the header and content */
 }
 
 /* Scrollbar styling */
