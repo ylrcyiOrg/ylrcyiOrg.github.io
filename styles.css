@@ -1,56 +1,151 @@
+/* Global Styles */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #2f3136; /* Dark background color like Discord */
+  color: #fff;
   margin: 0;
   padding: 0;
+  transition: all 0.3s ease;
 }
 
-.navbar {
-  background-color: #333;
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+button {
+  background-color: #7289da;
   color: white;
-  padding: 10px;
-  position: relative;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #5b6e99;
+}
+
+/* Navbar Styles */
+.navbar {
+  background-color: #36393f;
+  color: white;
+  padding: 15px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .hamburger {
   background: none;
   border: none;
   color: white;
-  font-size: 24px;
+  font-size: 30px;
+  cursor: pointer;
 }
 
+/* Menu Styles */
 .menu {
   display: none;
   position: absolute;
-  top: 50px;
+  top: 60px;
   right: 10px;
-  background-color: white;
-  border: 1px solid #ccc;
-  padding: 10px;
-  width: 200px;
+  background-color: #2f3136;
+  border: 1px solid #444;
+  padding: 15px;
+  width: 220px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .menu input {
-  margin-bottom: 10px;
+  background-color: #4f545c;
+  border: 1px solid #444;
+  color: white;
+  padding: 10px;
   width: 100%;
+  border-radius: 5px;
+  margin-bottom: 12px;
 }
 
+.menu button {
+  background-color: #43b581;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.menu button:hover {
+  background-color: #36a164;
+}
+
+/* Dropdowns */
 .dropdowns {
-  padding: 20px;
+  padding: 60px 20px 20px;
+  display: flex;
+  justify-content: space-between;
 }
 
+select {
+  background-color: #444;
+  color: white;
+  border: 1px solid #444;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 48%;
+  transition: background-color 0.3s;
+}
+
+select:hover {
+  background-color: #555;
+}
+
+/* Series & Episode Lists */
 .series-episode-container {
   display: flex;
+  padding: 20px 10px;
+  justify-content: space-between;
+  margin-top: 80px; /* Space for navbar */
 }
 
 .series-list, .episode-list {
-  width: 50%;
+  background-color: #383c44;
+  border-radius: 8px;
   padding: 10px;
+  width: 48%;
+  max-height: 400px; /* Max height for scroll */
+  overflow-y: auto;
 }
 
-h2 {
-  margin-top: 0;
+.series-list h2, .episode-list h2 {
+  font-size: 18px;
+  color: #b9bbbe;
 }
 
-button {
-  margin-top: 10px;
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #333;
 }
