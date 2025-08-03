@@ -60,8 +60,10 @@ select:hover {
   background: none;
   border: none;
   color: white;
-  font-size: 30px;
   cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
 }
 
 /* Menu (Pop-up) Styles */
