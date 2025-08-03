@@ -23,7 +23,15 @@
       </select>
     </div>
 
-    <button class="settings-icon" onclick="toggleMenu()">⚙️</button>
+    <button onclick="loadSeries()">Get Series List</button> <!-- Button to load series -->
+
+    <button class="settings-icon" onclick="toggleMenu()">
+      <!-- Settings Icon SVG -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M19.4 15.4l2.1 2.1m-2.1-4.6l2.1-2.1m-7.3-5.2l-2.1 2.1m-4.6-2.1l2.1 2.1m3.3 9.4l-2.1-2.1m-4.6-2.1l-2.1 2.1m7.3 5.2l-2.1-2.1m4.6-2.1l-2.1 2.1"></path>
+      </svg>
+    </button>
   </div>
 
   <div class="menu" id="menu">
