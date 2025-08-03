@@ -1,0 +1,56 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  position: relative;
+}
+
+.hamburger {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+}
+
+.menu {
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 200px;
+}
+
+.menu input {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.dropdowns {
+  padding: 20px;
+}
+
+.series-episode-container {
+  display: flex;
+}
+
+.series-list, .episode-list {
+  width: 50%;
+  padding: 10px;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+button {
+  margin-top: 10px;
+}
