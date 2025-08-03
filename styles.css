@@ -54,6 +54,7 @@ button:hover {
 
 select {
   background-color: transparent;
+  color: #fafafa;
   border: 1px solid #444;
   padding: 8px 20px 8px 16px;
   border-radius: 5px;
