@@ -9,28 +9,28 @@
 <body>
 
   <div class="navbar">
-    <button class="hamburger" onclick="toggleMenu()">☰</button>
-    <div id="menu" class="menu">
-      <label>Email: <input type="text" id="email" placeholder="Enter email"></label>
-      <label>Password: <input type="password" id="password" placeholder="Enter password"></label>
-      <button onclick="saveCredentials()">Save</button>
+    <div class="dropdowns">
+      <select id="platform" onchange="loadSeries()">
+        <option value="Lezhin">Lezhin</option>
+        <option value="Manta">Manta</option>
+        <option value="Tapas">Tapas</option>
+        <option value="Tappytoon">Tappytoon</option>
+      </select>
+    
+      <select id="displayType" onchange="loadSeries()">
+        <option value="All">All</option>
+        <option value="Bookmarked">Bookmarked</option>
+      </select>
     </div>
+
+    <button class="settings-icon" onclick="toggleMenu()">⚙️</button>
   </div>
 
-  <div class="dropdowns">
-    <select id="platform" onchange="loadSeries()">
-      <option value="Lezhin">Lezhin</option>
-      <option value="Manta">Manta</option>
-      <option value="Tapas">Tapas</option>
-      <option value="Tappytoon">Tappytoon</option>
-    </select>
-    
-    <select id="displayType" onchange="loadSeries()">
-      <option value="All">All</option>
-      <option value="Bookmarked">Bookmarked</option>
-    </select>
-
-    <button onclick="loadSeries()">Get Series List</button>
+  <div class="menu" id="menu">
+    <span class="close-btn" onclick="closeMenu()">×</span>
+    <label>Email: <input type="text" id="email" placeholder="Enter email"></label>
+    <label>Password: <input type="password" id="password" placeholder="Enter password"></label>
+    <button onclick="saveCredentials()">Save</button>
   </div>
 
   <div class="series-episode-container">
