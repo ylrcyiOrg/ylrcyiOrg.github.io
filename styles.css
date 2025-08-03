@@ -32,19 +32,28 @@ button:hover {
   background-color: #5b6e99;
 }
 
-/* Navbar Styles */
-.navbar {
-  background-color: #36393f;
-  color: white;
-  padding: 15px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
+/* Dropdowns and Settings Button */
+.controls-container {
+  padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 20px;
+}
+
+select {
+  background-color: #444;
+  color: white;
+  border: 1px solid #444;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 48%;
+  transition: background-color 0.3s;
+}
+
+select:hover {
+  background-color: #555;
 }
 
 .settings-icon {
@@ -102,34 +111,12 @@ button:hover {
   cursor: pointer;
 }
 
-/* Dropdowns */
-.dropdowns {
-  padding: 60px 20px 20px;
-  display: flex;
-  justify-content: space-between;
-}
-
-select {
-  background-color: #444;
-  color: white;
-  border: 1px solid #444;
-  padding: 8px 16px;
-  border-radius: 5px;
-  font-size: 14px;
-  width: 48%;
-  transition: background-color 0.3s;
-}
-
-select:hover {
-  background-color: #555;
-}
-
 /* Series & Episode Lists */
 .series-episode-container {
   display: flex;
   padding: 20px 10px;
   justify-content: space-between;
-  margin-top: 80px; /* Space for navbar */
+  margin-top: 20px;
 }
 
 .series-list, .episode-list {
