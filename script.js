@@ -18,6 +18,16 @@ async function fetchLezhinSeries(displayType) {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
+      'sec-ch-ua-platform': '"Chrome OS"',
+      'Referer': 'https://www.lezhinus.com/en/comic/thread_never_burned',
+      'X-LZ-AllowAdult': 'true',
+      'sec-ch-ua': '"Google Chrome";v="137", "Chromium";v="137", "Not/A)Brand";v="24"',
+      'sec-ch-ua-mobile': '?0',
+      'X-LZ-Adult': '2',
+      'User-Agent': 'Mozilla/5.0 (X11; CrOS x86_64 14541.0.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+      'X-LZ-Genres': 'adult,bl,drama,fantasy,romance',
+      'X-LZ-Locale': 'en-US',
+      'X-LZ-Country': 'us'
     }
   });
   const data = await response.json();
@@ -47,7 +57,18 @@ async function getLezhinToken() {
   if (!email || !password) return null;
   const response = await fetch('https://www.lezhinus.com/api/authentication/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0', 'Accept': '*/*',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Referer': 'https://www.lezhinus.com/en/login?redirect=%2Fen', 'Content-Type': 'application/json',
+        'X-LZ-Locale': 'en-US', 'X-LZ-Country': 'ge', 'X-LZ-Adult': '0',
+        'Origin': 'https://www.lezhinus.com', 'Connection': 'keep-alive',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-origin', 'Priority': 'u=0',
+        'Pragma': 'no-cache',
+        'Cache-Control': 'no-cache',
+    },
     body: JSON.stringify({ email, password, remember: true })
   });
   const data = await response.json();
