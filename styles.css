@@ -1,8 +1,8 @@
 /* Global Styles */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #2f3136; /* Dark background color like Discord */
-  color: #fff;
+  font-family: Inter,Inter Fallback;
+  background-color: #121212; /* Dark background color like Discord */
+  color: #fafafa;
   margin: 0;
   padding: 0;
   transition: all 0.3s ease;
@@ -135,7 +135,7 @@ select:hover {
 }
 
 .series-list, .episode-list {
-  background-color: #383c44;
+  background-color: #0A0A0A;
   border-radius: 8px;
   padding: 10px;
   width: 48%;
