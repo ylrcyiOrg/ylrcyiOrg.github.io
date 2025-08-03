@@ -69,7 +69,13 @@ async function getLezhinToken() {
         'Pragma': 'no-cache',
         'Cache-Control': 'no-cache',
     },
-    body: JSON.stringify({ email, password, remember: true })
+    body: JSON.stringify({
+      email: email,
+      password: password,
+      remember: true,
+      language: 'en',
+      provider: 'email'
+    })
   });
   const data = await response.json();
   return data.appConfig.accessToken;
