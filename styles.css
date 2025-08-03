@@ -47,7 +47,7 @@ button:hover {
   align-items: center;
 }
 
-.hamburger {
+.settings-icon {
   background: none;
   border: none;
   color: white;
@@ -55,18 +55,19 @@ button:hover {
   cursor: pointer;
 }
 
-/* Menu Styles */
+/* Menu (Pop-up) Styles */
 .menu {
   display: none;
-  position: absolute;
-  top: 60px;
-  right: 10px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: #2f3136;
-  border: 1px solid #444;
-  padding: 15px;
-  width: 220px;
   border-radius: 8px;
+  padding: 20px;
+  width: 300px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 20;
 }
 
 .menu input {
@@ -90,6 +91,15 @@ button:hover {
 
 .menu button:hover {
   background-color: #36a164;
+}
+
+.menu .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #b9bbbe;
+  font-size: 20px;
+  cursor: pointer;
 }
 
 /* Dropdowns */
