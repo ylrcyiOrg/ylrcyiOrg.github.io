@@ -55,7 +55,7 @@ async function loadEpisodes(alias) {
 
 async function getLezhinToken() {
   if (!email || !password) return null;
-  const response = await fetch('https://www.lezhinus.com/api/authentication/login', {
+  const response = await fetch('https://cors-anywhere.herokuapp.com/https://www.lezhinus.com/api/authentication/login', {
     method: 'POST',
     headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0', 'Accept': '*/*',
