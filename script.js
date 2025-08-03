@@ -14,7 +14,7 @@ async function loadSeries() {
 
 async function fetchLezhinSeries(displayType) {
   const token = await getLezhinToken();
-  const response = await fetch('https://www.lezhinus.com/lz-api/v2/comics?limit=10000&offset=0', {
+  const response = await fetch('https://cors-anywhere.herokuapp.com/https://www.lezhinus.com/lz-api/v2/comics?limit=10000&offset=0', {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
