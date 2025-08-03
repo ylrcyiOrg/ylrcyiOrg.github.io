@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comic Viewer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+    <div id="menu" class="menu">
+      <label>Email: <input type="text" id="email" placeholder="Enter email"></label>
+      <label>Password: <input type="password" id="password" placeholder="Enter password"></label>
+      <button onclick="saveCredentials()">Save</button>
+    </div>
+  </div>
+
+  <div class="dropdowns">
+    <select id="platform" onchange="loadSeries()">
+      <option value="Lezhin">Lezhin</option>
+      <option value="Manta">Manta</option>
+      <option value="Tapas">Tapas</option>
+      <option value="Tappytoon">Tappytoon</option>
+    </select>
+    
+    <select id="displayType" onchange="loadSeries()">
+      <option value="All">All</option>
+      <option value="Bookmarked">Bookmarked</option>
+    </select>
+  </div>
+
+  <div class="series-episode-container">
+    <div id="seriesList" class="series-list">
+      <h2>Series List</h2>
+      <!-- Series will be displayed here -->
+    </div>
+    <div id="episodeList" class="episode-list">
+      <h2>Episode List</h2>
+      <!-- Episodes will be displayed here -->
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
