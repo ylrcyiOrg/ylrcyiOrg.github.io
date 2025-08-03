@@ -23,9 +23,13 @@ async function fetchLezhinSeries(displayType) {
   const data = await response.json();
   
   let seriesListHtml = '';
-  data.data.forEach(series => {
-    seriesListHtml += `<div class="series" onclick="loadEpisodes('${series.alias}')">${series.title}</div>`;
-  });
+  if (data.code === 0 && data.data) {
+    data.data.forEach(series => {
+      seriesListHtml += `<div class="series" onclick="loadEpisodes('${series.alias}')">${series.title}</div>`;
+    });
+  } else {
+    seriesListHtml = '<p>No series found.</p>';
+  }
 
   document.getElementById('seriesList').innerHTML = seriesListHtml;
 }
