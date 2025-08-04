@@ -65,6 +65,16 @@ select {
   width: 160px; /* Adjust width of selects */
   transition: background-color 0.3s;
   margin-right: 20px; /* Space between the selects */
+  
+  /* Remove default dropdown arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  /* Optional: Custom background image for the arrow */
+  background-image: url('custom-arrow.svg');
+  background-position: right 10px center; /* Position the custom arrow */
+  background-repeat: no-repeat;
 }
 
 select:hover {
