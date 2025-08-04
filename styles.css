@@ -144,7 +144,7 @@ select:hover {
   padding: 20px 10px;
   justify-content: space-between;
   margin-top: 20px;
-  min-height: 100dvh;
+  height: 100%;
 }
 
 .series-list, .episode-list {
