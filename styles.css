@@ -1,7 +1,7 @@
 /* Global Styles */
 body {
   font-family: Inter, Inter Fallback;
-  background-color: #121212; /* Dark background color like Discord */
+  background-color: #000000; /* Dark background color like Discord */
   color: #fafafa;
   margin: 0;
   padding: 0;
@@ -152,7 +152,7 @@ select:hover {
   border: 1px solid #262626;
   padding: 10px;
   width: 48%;
-  height: 100dvh;
+  height: 50dvh;
   overflow-y: auto;
 }
 
