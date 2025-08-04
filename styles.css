@@ -144,7 +144,6 @@ select:hover {
   padding: 20px 10px;
   justify-content: space-between;
   margin-top: 20px;
-  height: 100%;
 }
 
 .series-list, .episode-list {
@@ -153,7 +152,7 @@ select:hover {
   border: 1px solid #262626;
   padding: 10px;
   width: 48%;
-  max-height: 400px;
+  height: 100%;
   overflow-y: auto;
 }
 
