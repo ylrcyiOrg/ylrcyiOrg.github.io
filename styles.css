@@ -152,7 +152,7 @@ select:hover {
   border: 1px solid #262626;
   padding: 10px;
   width: 48%;
-  height: 50dvh;
+  height: 50vh;
   overflow-y: auto;
 }
 
