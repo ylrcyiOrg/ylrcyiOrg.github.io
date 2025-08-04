@@ -113,9 +113,10 @@ select:hover {
   width: 40px;
   height: 40px;
   display: inline-block;
-  padding: 5px;
+  padding: 5px 2px 5px 5px;
   border-radius: 50%;
   transition: background-color 0.3s;
+  margin-right: auto;
 }
 
 .load:hover {
