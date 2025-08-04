@@ -41,7 +41,8 @@ button:hover {
   margin-top: 20px;
   border: 1px solid #262626;
   border-radius: 4px;
-  width: 98%;
+  margin-left: 1%;
+  margin-right: 1%;
   background-color: #0A0A0A;
 }
 
