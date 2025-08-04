@@ -105,6 +105,29 @@ select:hover {
   object-fit: contain;
 }
 
+.load {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.load:hover {
+  background-color: #444;
+}
+
+.load img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 /* Menu (Pop-up) Styles */
 .menu {
   display: none;
