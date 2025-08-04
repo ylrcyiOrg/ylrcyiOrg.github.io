@@ -158,7 +158,11 @@ select:hover {
 
 .series-list h2, .episode-list h2 {
   font-size: 18px;
-  color: #b9bbbe;
+  color: #fafafa;
+}
+
+.containter-label {
+  text-align: center;
 }
 
 /* Scrollbar styling */
