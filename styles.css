@@ -59,8 +59,8 @@ select {
   background-color: transparent;
   color: #fafafa;
   border: 1px solid #444;
-  padding: 8px 20px 8px 16px;
-  border-radius: 5px;
+  padding: 8px 0px 8px 10px;
+  border-radius: 4px;
   font-size: 14px;
   width: 160px; /* Adjust width of selects */
   transition: background-color 0.3s;
@@ -75,6 +75,7 @@ select {
   background-image: url('custom-arrow.svg');
   background-position: right 10px center; /* Position the custom arrow */
   background-repeat: no-repeat;
+  background-size: 16px;
 }
 
 select:hover {
