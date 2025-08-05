@@ -79,6 +79,18 @@
       </div>
     </div>
   </div>
+  
+  <div class="edit-display-popup" id="editDisplayPopup">
+    <div class="popup-content">
+      <h3>Edit Display Type</h3>
+      <input type="text" id="editDisplayTypeName" placeholder="Display type name">
+      <div class="button-group">
+        <button onclick="saveEditedDisplayType()">Save Changes</button>
+        <button class="delete-btn" onclick="deleteDisplayType()">Delete</button>
+        <button onclick="closeEditDisplayPopup()">Cancel</button>
+      </div>
+    </div>
+  </div>
 
   <div class="series-episode-container">
     <div id="seriesList" class="series-list">
