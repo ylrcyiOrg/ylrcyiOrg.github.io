@@ -72,7 +72,7 @@ select {
   appearance: none;
   
   /* Optional: Custom background image for the arrow */
-  background-image: url('custom-arrow.svg');
+  background-image: url('assets/custom-arrow.svg');
   background-position: right 10px center; /* Position the custom arrow */
   background-repeat: no-repeat;
   background-size: 16px;
