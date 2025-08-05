@@ -134,13 +134,13 @@ select:hover {
   border: none;
   color: white;
   cursor: pointer;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   display: inline-block;
-  padding: 5px 5px 5px 5px;
+  padding: 3px;
   border-radius: 50%;
   transition: background-color 0.3s;
-  margin-right: auto;
+  margin-right: 5px;
 }
 
 .bookmark-btn:hover, add-to-btn:hover {
@@ -247,4 +247,7 @@ select:hover {
   padding-left: 5px;
   border-bottom: 1px solid #262626;
   border-top: 1px solid #262626;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
