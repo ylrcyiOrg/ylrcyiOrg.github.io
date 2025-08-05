@@ -60,7 +60,7 @@ async function fetchLezhinSeries(displayType) {
   if (data.code === 0 && data.data) {
     data.data.forEach(series => {
       const isBookmarked = bookmarks[series.alias] || false;
-      const bookmarkIcon = isBookmarked ? 'filled_star.svg' : 'empty_star.svg';
+      const bookmarkIcon = isBookmarked ? 'assets/filled_star.svg' : 'assets/empty_star.svg';
       const displayTypeSelected = displayType === 'Bookmarked' && isBookmarked;
 
       // Only add bookmarked series when the display type is 'Bookmarked'
@@ -72,7 +72,7 @@ async function fetchLezhinSeries(displayType) {
             <img src="${bookmarkIcon}" alt="Bookmark" class="bookmark-icon" />
           </button>
           <button class="add-to-btn" onclick="addToDisplayType('${series.alias}')">
-            <img src="plus.svg" alt="Add to" class="add-to-icon" />
+            <img src="assets/plus.svg" alt="Add to" class="add-to-icon" />
           </button>
           ${series.title}
         </div>`;
