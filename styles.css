@@ -217,7 +217,7 @@ select:hover {
   background-color: #333;
 }
 
-.series .episode {
+.series, .episode {
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 5px;
