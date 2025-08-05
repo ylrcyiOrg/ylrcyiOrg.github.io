@@ -28,7 +28,7 @@
 
     <button class="load">
       <img src="assets/reload.svg" alt="load" width="30" height="30">
-    </button> <!-- Button to load series -->
+    </button>
 
     <button class="settings-icon">
       <img src="assets/setting.svg" alt="Settings" width="30" height="30">
@@ -42,14 +42,50 @@
     <button onclick="saveCredentials()">Save</button>
   </div>
 
+  <!-- Add to Display Type Popup -->
+  <div class="add-to-popup" id="addToPopup">
+    <div class="popup-content">
+      <h3>Manage Series</h3>
+      <div class="form-group">
+        <label>Bato Series ID:</label>
+        <input type="text" id="batoSeriesId" placeholder="Enter Bato.to ID">
+        <button onclick="setBatoId()">Set Bato ID</button>
+      </div>
+      <div class="form-group">
+        <label>Display Types:</label>
+        <div class="display-types-list" id="displayTypesList"></div>
+        <button onclick="createNewDisplayType()">Create New Display Type</button>
+      </div>
+      <button class="close-popup" onclick="closeAddToPopup()">Close</button>
+    </div>
+  </div>
+
+  <!-- Bato ID Set Confirmation Popup -->
+  <div class="bato-confirm-popup" id="batoConfirmPopup">
+    <div class="popup-content">
+      <p>Bato.to ID set successfully!</p>
+      <button onclick="closeBatoConfirmPopup()">OK</button>
+    </div>
+  </div>
+
+  <!-- New Display Type Popup -->
+  <div class="new-display-popup" id="newDisplayPopup">
+    <div class="popup-content">
+      <h3>Create New Display Type</h3>
+      <input type="text" id="newDisplayTypeName" placeholder="Enter display type name">
+      <div class="button-group">
+        <button onclick="confirmNewDisplayType()">Create</button>
+        <button onclick="closeNewDisplayPopup()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <div class="series-episode-container">
     <div id="seriesList" class="series-list">
       <h2 class="container-label">Series List</h2>
-      <!-- Series will be displayed here -->
     </div>
     <div id="episodeList" class="episode-list">
       <h2 class="container-label">Episode List</h2>
-      <!-- Episodes will be displayed here -->
     </div>
   </div>
 
