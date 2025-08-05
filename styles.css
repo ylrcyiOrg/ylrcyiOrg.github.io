@@ -176,24 +176,18 @@ select:hover {
   z-index: 20;
 }
 
-/*.menu input {
-  background-color: #4f545c;
-  border: 1px solid #444;
+.menu input {
   color: white;
   padding: 10px;
   width: 100%;
-  border-radius: 5px;
   margin-bottom: 12px;
 }
 
 .menu button {
-  background-color: #43b581;
-  border: none;
   padding: 10px;
   width: 100%;
-  border-radius: 5px;
   cursor: pointer;
-} */
+}
 
 .menu button:hover {
   background-color: #36a164;
