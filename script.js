@@ -1,5 +1,5 @@
-const CLIENT_ID = 'YOUR_CLIENT_ID';
-const REPO = 'YOUR_USERNAME/YOUR_REPO';
+const CLIENT_ID = 'Ov23liigKybkVHzWD8WC';
+const REPO = 'ylrcyiOrg/ylrcyiOrg.github.io';
 let accessToken = '';
 let username = '';
 let userData = {
