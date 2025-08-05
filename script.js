@@ -22,16 +22,20 @@ let password = localStorage.getItem('password') || '';
 document.getElementById('email').value = email;
 document.getElementById('password').value = password;
 
-// Function to load series based on platform and display type
+let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || {};
+let displayTypes = JSON.parse(localStorage.getItem('displayTypes')) || {};
+
+// Function to load series based on display type
 async function loadSeries() {
   const platform = document.getElementById('platform').value;
   const displayType = document.getElementById('displayType').value;
+  
   if (platform === 'Lezhin') {
     await fetchLezhinSeries(displayType);
   }
 }
 
-// Function to fetch series from Lezhin platform
+// Fetch Lezhin series (Updated to include bookmark filtering)
 async function fetchLezhinSeries(displayType) {
   const token = await getLezhinToken();
   const response = await fetch('https://cors-anywhere.herokuapp.com/https://www.lezhinus.com/lz-api/v2/comics?limit=10000&offset=0', {
@@ -55,7 +59,23 @@ async function fetchLezhinSeries(displayType) {
   let seriesListHtml = '';
   if (data.code === 0 && data.data) {
     data.data.forEach(series => {
-      seriesListHtml += `<div class="series" onclick="loadEpisodes('${series.alias}')">${series.title}</div>`;
+      const isBookmarked = bookmarks[series.alias] || false;
+      const bookmarkIcon = isBookmarked ? 'filled_star.svg' : 'empty_star.svg';
+      const displayTypeSelected = displayType === 'Bookmarked' && isBookmarked;
+
+      // Only add bookmarked series when the display type is 'Bookmarked'
+      if (displayType === 'Bookmarked' && !isBookmarked) return;
+
+      seriesListHtml += `
+        <div class="series" onclick="loadEpisodes('${series.alias}')">
+          <button class="bookmark-btn" onclick="toggleBookmark('${series.alias}')">
+            <img src="${bookmarkIcon}" alt="Bookmark" class="bookmark-icon" />
+          </button>
+          <button class="add-to-btn" onclick="addToDisplayType('${series.alias}')">
+            <img src="plus.svg" alt="Add to" class="add-to-icon" />
+          </button>
+          ${series.title}
+        </div>`;
     });
   } else {
     seriesListHtml = '<p>No series found.</p>';
@@ -68,6 +88,52 @@ async function fetchLezhinSeries(displayType) {
   seriesListContainer.appendChild(existingLabel); // Append h2 again
   seriesListContainer.innerHTML += seriesListHtml;
 }
+
+// Function to toggle bookmark status for a series
+function toggleBookmark(alias) {
+  bookmarks[alias] = !bookmarks[alias];
+  localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  loadSeries(); // Re-load series after toggle
+}
+
+// Function to add or remove series from display types
+function addToDisplayType(alias) {
+  const displayType = prompt('Enter display type name:');
+  if (!displayType) return;
+  
+  if (!displayTypes[displayType]) {
+    displayTypes[displayType] = [];
+  }
+
+  if (!displayTypes[displayType].includes(alias)) {
+    displayTypes[displayType].push(alias);
+  } else {
+    const index = displayTypes[displayType].indexOf(alias);
+    displayTypes[displayType].splice(index, 1);
+  }
+
+  localStorage.setItem('displayTypes', JSON.stringify(displayTypes));
+  loadSeries(); // Re-load series after adding/removing
+}
+
+// Function to create a new display type (in the dropdown)
+function createNewDisplayType() {
+  const newDisplayType = prompt('Enter the name for the new display type:');
+  if (newDisplayType && !document.querySelector(`#displayType option[value="${newDisplayType}"]`)) {
+    const newOption = document.createElement('option');
+    newOption.value = newDisplayType;
+    newOption.textContent = newDisplayType;
+    document.getElementById('displayType').appendChild(newOption);
+  }
+}
+
+// Add event listener to create a new display type
+document.getElementById('displayType').addEventListener('change', () => {
+  const selectedType = document.getElementById('displayType').value;
+  if (selectedType === 'New') {
+    createNewDisplayType();
+  }
+});
 
 // Function to load episodes for a selected series
 async function loadEpisodes(alias) {
