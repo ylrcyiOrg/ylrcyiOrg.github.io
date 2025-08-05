@@ -41,7 +41,15 @@ async function fetchLezhinSeries(displayType) {
     seriesListHtml = '<p>No series found.</p>';
   }
 
-  document.getElementById('seriesList').innerHTML = seriesListHtml;
+  const seriesListContainer = document.getElementById('seriesList');
+
+// Ensure the h2 element remains intact
+  const existingLabel = seriesListContainer.querySelector('.container-label');
+  
+  // Insert the new HTML without affecting the h2 element
+  seriesListContainer.innerHTML = ''; // Clear existing content
+  seriesListContainer.appendChild(existingLabel); // Append h2 again
+  seriesListContainer.innerHTML += seriesListHtml;
 }
 
 async function loadEpisodes(alias) {
