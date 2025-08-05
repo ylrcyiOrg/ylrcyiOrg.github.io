@@ -1,9 +1,22 @@
-let email = localStorage.getItem('email') || '';
-let password = localStorage.getItem('password') || '';
+// Wait for the DOM to fully load before adding event listeners
+document.addEventListener('DOMContentLoaded', () => {
 
-document.getElementById('email').value = email;
-document.getElementById('password').value = password;
+  // Add event listeners to dropdowns
+  document.getElementById('platform').addEventListener('change', loadSeries);
+  document.getElementById('displayType').addEventListener('change', loadSeries);
 
+  // Add event listener to load button
+  document.querySelector('.load').addEventListener('click', loadSeries);
+
+  // Add event listener to settings button
+  document.querySelector('.settings-icon').addEventListener('click', toggleMenu);
+
+  // Add event listener to the close button in the menu
+  document.querySelector('.close-btn').addEventListener('click', closeMenu);
+  
+});
+
+// Function to load series based on platform and display type
 async function loadSeries() {
   const platform = document.getElementById('platform').value;
   const displayType = document.getElementById('displayType').value;
@@ -12,11 +25,12 @@ async function loadSeries() {
   }
 }
 
+// Function to fetch series from Lezhin platform
 async function fetchLezhinSeries(displayType) {
   const token = await getLezhinToken();
   const response = await fetch('https://cors-anywhere.herokuapp.com/https://www.lezhinus.com/lz-api/v2/comics?limit=10000&offset=0', {
     headers: {
-      'Authorization': 'Bearer ${token}',
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
       'sec-ch-ua-platform': '"Chrome OS"',
       'Referer': 'https://www.lezhinus.com/en/comic/thread_never_burned',
@@ -35,40 +49,36 @@ async function fetchLezhinSeries(displayType) {
   let seriesListHtml = '';
   if (data.code === 0 && data.data) {
     data.data.forEach(series => {
-      seriesListHtml += <div class="series" onclick="loadEpisodes('${series.alias}')">${series.title}</div>;
+      seriesListHtml += `<div class="series" onclick="loadEpisodes('${series.alias}')">${series.title}</div>`;
     });
   } else {
     seriesListHtml = '<p>No series found.</p>';
   }
 
   const seriesListContainer = document.getElementById('seriesList');
-
-// Ensure the h2 element remains intact
   const existingLabel = seriesListContainer.querySelector('.container-label');
   
-  // Insert the new HTML without affecting the h2 element
   seriesListContainer.innerHTML = ''; // Clear existing content
   seriesListContainer.appendChild(existingLabel); // Append h2 again
   seriesListContainer.innerHTML += seriesListHtml;
 }
 
+// Function to load episodes for a selected series
 async function loadEpisodes(alias) {
   const episodes = await getEpisodeList(alias);
   let episodeListHtml = '';
   episodes.forEach(ep => {
-    episodeListHtml += <div class="episode">${ep.display.title}</div>;
+    episodeListHtml += `<div class="episode">${ep.display.title}</div>`;
   });
   const episodeListContainer = document.getElementById('episodeList');
-
-// Ensure the h2 element remains intact
   const existingLabel = episodeListContainer.querySelector('.container-label');
   
-  // Insert the new HTML without affecting the h2 element
   episodeListContainer.innerHTML = ''; // Clear existing content
   episodeListContainer.appendChild(existingLabel); // Append h2 again
   episodeListContainer.innerHTML += episodeListHtml;
 }
 
+// Get Lezhin token
 async function getLezhinToken() {
   if (!email || !password) return null;
   const response = await fetch('https://cors-anywhere.herokuapp.com/https://www.lezhinus.com/api/authentication/login', {
@@ -97,6 +107,7 @@ async function getLezhinToken() {
   return data.appConfig.accessToken;
 }
 
+// Get episode list for a given series alias
 async function getEpisodeList(alias) {
   const LEZHIN_HEADERS = {
     'user-agent': 'LezhinComics/2024.8.0 (Linux; Android 9; SM-G998B) gzip',
@@ -110,7 +121,7 @@ async function getEpisodeList(alias) {
     'accept-encoding': 'gzip'
   };
 
-  const url = https://api.lezhin.com/v2/contents/${alias}/all?type=comic&withExpired=false;
+  const url = `https://api.lezhin.com/v2/contents/${alias}/all?type=comic&withExpired=false`;
   const response = await fetch(url, { headers: LEZHIN_HEADERS });
   const data = await response.json();
 
@@ -119,6 +130,7 @@ async function getEpisodeList(alias) {
   return episodeList;
 }
 
+// Save credentials to localStorage
 function saveCredentials() {
   email = document.getElementById('email').value;
   password = document.getElementById('password').value;
@@ -127,12 +139,14 @@ function saveCredentials() {
   alert('Credentials saved!');
 }
 
+// Toggle settings menu visibility
 function toggleMenu() {
   const menu = document.getElementById('menu');
   menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
 
+// Close the settings menu
 function closeMenu() {
-  const menu = document.getElementById("menu");
-  menu.style.display = "none";
+  const menu = document.getElementById('menu');
+  menu.style.display = 'none';
 }
