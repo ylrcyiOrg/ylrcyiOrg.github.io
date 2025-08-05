@@ -58,7 +58,15 @@ async function loadEpisodes(alias) {
   episodes.forEach(ep => {
     episodeListHtml += `<div class="episode">${ep.display.title}</div>`;
   });
-  document.getElementById('episodeList').innerHTML = episodeListHtml;
+  const episodeListContainer = document.getElementById('episodeList');
+
+// Ensure the h2 element remains intact
+  const existingLabel = seriesListContainer.querySelector('.container-label');
+  
+  // Insert the new HTML without affecting the h2 element
+  episodeListContainer.innerHTML = ''; // Clear existing content
+  episodeListContainer.appendChild(existingLabel); // Append h2 again
+  episodeListContainer.innerHTML += seriesListHtml;
 }
 
 async function getLezhinToken() {
