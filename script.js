@@ -1,6 +1,8 @@
 // Wait for the DOM to fully load before adding event listeners
 document.addEventListener('DOMContentLoaded', () => {
-
+  // Initialize display types dropdown
+  updateDisplayTypesDropdown();
+  
   // Add event listeners to dropdowns
   document.getElementById('platform').addEventListener('change', loadSeries);
   document.getElementById('displayType').addEventListener('change', loadSeries);
@@ -13,34 +15,173 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Add event listener to the close button in the menu
   document.querySelector('.close-btn').addEventListener('click', closeMenu);
-  
 });
 
 let email = localStorage.getItem('email') || '';
 let password = localStorage.getItem('password') || '';
+let currentSeriesAlias = null; // Track which series is being managed
 
 document.getElementById('email').value = email;
 document.getElementById('password').value = password;
 
 let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || {};
 let displayTypes = JSON.parse(localStorage.getItem('displayTypes')) || {};
+let batoSeriesIds = JSON.parse(localStorage.getItem('batoSeriesIds')) || {};
+
+// Function to update display types dropdown
+function updateDisplayTypesDropdown() {
+  const displayTypeSelect = document.getElementById('displayType');
+  
+  // Clear existing options except All and Bookmarked
+  displayTypeSelect.innerHTML = `
+    <option value="All">All</option>
+    <option value="Bookmarked">Bookmarked</option>
+  `;
+  
+  // Add existing display types
+  Object.keys(displayTypes).forEach(type => {
+    if (type !== 'All' && type !== 'Bookmarked') {
+      const option = document.createElement('option');
+      option.value = type;
+      option.textContent = type;
+      displayTypeSelect.appendChild(option);
+    }
+  });
+  
+  // Add "Create New Display Group" option
+  const newOption = document.createElement('option');
+  newOption.value = 'Create New Display Group';
+  newOption.textContent = 'Create New Display Group';
+  displayTypeSelect.appendChild(newOption);
+}
 
 // Function to load series based on display type
 async function loadSeries() {
   const platform = document.getElementById('platform').value;
   const displayType = document.getElementById('displayType').value;
   
+  // Handle "Create New Display Group" selection
+  if (displayType === 'Create New Display Group') {
+    document.getElementById('newDisplayPopup').style.display = 'block';
+    document.getElementById('displayType').value = 'All'; // Reset to All
+    return;
+  }
+  
   if (platform === 'Lezhin') {
     await fetchLezhinSeries(displayType);
   }
 }
 
-// Fetch Lezhin series (Updated to include bookmark filtering)
+// Function to show the "Add to" popup
+function addToDisplayType(alias, event) {
+  event.stopPropagation(); // Prevent triggering the series click
+  currentSeriesAlias = alias;
+  
+  // Set current Bato ID if exists
+  document.getElementById('batoSeriesId').value = batoSeriesIds[alias] || '';
+  
+  // Populate display types list
+  const displayTypesList = document.getElementById('displayTypesList');
+  displayTypesList.innerHTML = '';
+  
+  Object.keys(displayTypes).forEach(type => {
+    if (type !== 'All' && type !== 'Bookmarked') {
+      const isInType = displayTypes[type].includes(alias);
+      const item = document.createElement('div');
+      item.className = 'display-type-item';
+      item.innerHTML = `
+        <input type="checkbox" id="type-${type}" ${isInType ? 'checked' : ''}>
+        <label for="type-${type}">${type}</label>
+      `;
+      item.querySelector('input').addEventListener('change', (e) => {
+        toggleSeriesInDisplayType(alias, type, e.target.checked);
+      });
+      displayTypesList.appendChild(item);
+    }
+  });
+  
+  // Show the popup
+  document.getElementById('addToPopup').style.display = 'block';
+}
+
+// Function to toggle series in a display type
+function toggleSeriesInDisplayType(alias, type, isChecked) {
+  if (!displayTypes[type]) {
+    displayTypes[type] = [];
+  }
+  
+  if (isChecked && !displayTypes[type].includes(alias)) {
+    displayTypes[type].push(alias);
+  } else if (!isChecked) {
+    const index = displayTypes[type].indexOf(alias);
+    if (index > -1) {
+      displayTypes[type].splice(index, 1);
+    }
+  }
+  
+  localStorage.setItem('displayTypes', JSON.stringify(displayTypes));
+  updateDisplayTypesDropdown();
+}
+
+// Function to set Bato ID for current series
+function setBatoId() {
+  const batoId = document.getElementById('batoSeriesId').value.trim();
+  if (currentSeriesAlias) {
+    batoSeriesIds[currentSeriesAlias] = batoId;
+    localStorage.setItem('batoSeriesIds', JSON.stringify(batoSeriesIds));
+    
+    // Show confirmation
+    document.getElementById('batoConfirmPopup').style.display = 'block';
+  }
+}
+
+// Function to create a new display type
+function createNewDisplayType() {
+  document.getElementById('newDisplayPopup').style.display = 'block';
+}
+
+// Function to confirm new display type creation
+function confirmNewDisplayType() {
+  const newTypeName = document.getElementById('newDisplayTypeName').value.trim();
+  if (newTypeName && !displayTypes[newTypeName]) {
+    displayTypes[newTypeName] = [];
+    localStorage.setItem('displayTypes', JSON.stringify(displayTypes));
+    
+    // Add to dropdown
+    updateDisplayTypesDropdown();
+    
+    // Select the new type
+    document.getElementById('displayType').value = newTypeName;
+    
+    // Close popup and reload series
+    closeNewDisplayPopup();
+    loadSeries();
+  }
+}
+
+// Function to close "Add to" popup
+function closeAddToPopup() {
+  document.getElementById('addToPopup').style.display = 'none';
+  currentSeriesAlias = null;
+}
+
+// Function to close Bato confirmation popup
+function closeBatoConfirmPopup() {
+  document.getElementById('batoConfirmPopup').style.display = 'none';
+}
+
+// Function to close new display type popup
+function closeNewDisplayPopup() {
+  document.getElementById('newDisplayPopup').style.display = 'none';
+  document.getElementById('newDisplayTypeName').value = '';
+}
+
+// Function to fetch Lezhin series with display type filtering
 async function fetchLezhinSeries(displayType) {
   const token = await getLezhinToken();
   const response = await fetch('https://cors-anywhere.herokuapp.com/https://www.lezhinus.com/lz-api/v2/comics?limit=10000&offset=0', {
     headers: {
-      'Authorization': Bearer ${token},
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
       'sec-ch-ua-platform': '"Chrome OS"',
       'Referer': 'https://www.lezhinus.com/en/comic/thread_never_burned',
@@ -61,21 +202,24 @@ async function fetchLezhinSeries(displayType) {
     data.data.forEach(series => {
       const isBookmarked = bookmarks[series.alias] || false;
       const bookmarkIcon = isBookmarked ? 'assets/filled_star.svg' : 'assets/empty_star.svg';
-      const displayTypeSelected = displayType === 'Bookmarked' && isBookmarked;
-
-      // Only add bookmarked series when the display type is 'Bookmarked'
+      
+      // Filter based on display type
       if (displayType === 'Bookmarked' && !isBookmarked) return;
-
-      seriesListHtml += 
+      if (displayType !== 'All' && displayType !== 'Bookmarked' && 
+          (!displayTypes[displayType] || !displayTypes[displayType].includes(series.alias))) {
+        return;
+      }
+      
+      seriesListHtml += `
         <div class="series" onclick="loadEpisodes('${series.alias}')">
-          <button class="bookmark-btn" onclick="toggleBookmark('${series.alias}')">
+          <button class="bookmark-btn" onclick="toggleBookmark('${series.alias}', event)">
             <img src="${bookmarkIcon}" alt="Bookmark" class="bookmark-icon" />
           </button>
-          <button class="add-to-btn" onclick="addToDisplayType('${series.alias}')">
+          <button class="add-to-btn" onclick="addToDisplayType('${series.alias}', event)">
             <img src="assets/plus.svg" alt="Add to" class="add-to-icon" />
           </button>
           ${series.title}
-        </div>;
+        </div>`;
     });
   } else {
     seriesListHtml = '<p>No series found.</p>';
@@ -90,57 +234,19 @@ async function fetchLezhinSeries(displayType) {
 }
 
 // Function to toggle bookmark status for a series
-function toggleBookmark(alias) {
+function toggleBookmark(alias, event) {
+  event.stopPropagation();
   bookmarks[alias] = !bookmarks[alias];
   localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
   loadSeries(); // Re-load series after toggle
 }
-
-// Function to add or remove series from display types
-function addToDisplayType(alias) {
-  const displayType = prompt('Enter display type name:');
-  if (!displayType) return;
-  
-  if (!displayTypes[displayType]) {
-    displayTypes[displayType] = [];
-  }
-
-  if (!displayTypes[displayType].includes(alias)) {
-    displayTypes[displayType].push(alias);
-  } else {
-    const index = displayTypes[displayType].indexOf(alias);
-    displayTypes[displayType].splice(index, 1);
-  }
-
-  localStorage.setItem('displayTypes', JSON.stringify(displayTypes));
-  loadSeries(); // Re-load series after adding/removing
-}
-
-// Function to create a new display type (in the dropdown)
-function createNewDisplayType() {
-  const newDisplayType = prompt('Enter the name for the new display type:');
-  if (newDisplayType && !document.querySelector(#displayType option[value="${newDisplayType}"])) {
-    const newOption = document.createElement('option');
-    newOption.value = newDisplayType;
-    newOption.textContent = newDisplayType;
-    document.getElementById('displayType').appendChild(newOption);
-  }
-}
-
-// Add event listener to create a new display type
-document.getElementById('displayType').addEventListener('change', () => {
-  const selectedType = document.getElementById('displayType').value;
-  if (selectedType === 'New') {
-    createNewDisplayType();
-  }
-});
 
 // Function to load episodes for a selected series
 async function loadEpisodes(alias) {
   const episodes = await getEpisodeList(alias);
   let episodeListHtml = '';
   episodes.forEach(ep => {
-    episodeListHtml += <div class="episode">${ep.display.title}</div>;
+    episodeListHtml += `<div class="episode">${ep.display.title}</div>`;
   });
   const episodeListContainer = document.getElementById('episodeList');
   const existingLabel = episodeListContainer.querySelector('.container-label');
@@ -193,7 +299,7 @@ async function getEpisodeList(alias) {
     'accept-encoding': 'gzip'
   };
 
-  const url = https://api.lezhin.com/v2/contents/${alias}/all?type=comic&withExpired=false;
+  const url = `https://api.lezhin.com/v2/contents/${alias}/all?type=comic&withExpired=false`;
   const response = await fetch(url, { headers: LEZHIN_HEADERS });
   const data = await response.json();
 
