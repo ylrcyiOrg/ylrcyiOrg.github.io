@@ -19,9 +19,9 @@ h2 {
 }
 
 button {
-  background-color: #7289da;
+  background-color: transparent;
   color: white;
-  border: none;
+  border: 1px solid #262626;
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
@@ -261,12 +261,13 @@ select:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #2f3136;
-  border-radius: 8px;
+  background-color: #000000;
+  border-radius: 4px;
   padding: 20px;
   width: 350px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   z-index: 20;
+  border: 1px solid #262626;
 }
 
 .popup-content {
@@ -296,7 +297,7 @@ select:hover {
   border: 1px solid #444;
   padding: 10px;
   border-radius: 4px;
-  background-color: #1e1e1e;
+  background-color: #0A0A0A;
 }
 
 .display-type-item {
@@ -378,10 +379,10 @@ select:hover {
   width: 100%;
   padding: 8px;
   margin-bottom: 15px;
-  background-color: #4f545c;
-  border: 1px solid #444;
   color: white;
-  border-radius: 4px;
+  background-color: #0A0A0A;
+  border: 1px solid #262626;
+  border-raidus: 4px;
 }
 
 .edit-display-btn {
