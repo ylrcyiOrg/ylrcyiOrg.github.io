@@ -251,3 +251,110 @@ select:hover {
   align-items: center;
   justify-content: flex-start;
 }
+
+/* Add these styles to your existing CSS */
+
+/* Add to Display Type Popup */
+.add-to-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #2f3136;
+  border-radius: 8px;
+  padding: 20px;
+  width: 350px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 20;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.popup-content h3 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: bold;
+}
+
+.display-types-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #444;
+  padding: 10px;
+  border-radius: 4px;
+  background-color: #1e1e1e;
+}
+
+.display-type-item {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.display-type-item input {
+  margin-right: 10px;
+}
+
+.close-popup {
+  margin-top: 15px;
+  background-color: #7289da;
+}
+
+.close-popup:hover {
+  background-color: #5b6e99;
+}
+
+/* Bato ID Confirmation Popup */
+.bato-confirm-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #2f3136;
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 30;
+  text-align: center;
+}
+
+/* New Display Type Popup */
+.new-display-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #2f3136;
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 30;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.button-group button {
+  flex: 1;
+}
