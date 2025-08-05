@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Comic Viewer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-
   <div class="controls-container">
     <div class="dropdowns">
       <h2>Platforms:</h2>
       <select id="platform" onchange="loadSeries()">
         <option value="Lezhin">Lezhin</option>
-        <option value="Manta">Manta</option>
-        <option value="Tapas">Tapas</option>
-        <option value="Tappytoon">Tappytoon</option>
       </select>
       <h2>Series Display:</h2>
       <select id="displayType" onchange="loadSeries()">
@@ -28,29 +21,26 @@
     </div>
 
     <button class="load" onclick="loadSeries()">
-      <img src="reload.svg" alt="load" width="30" height="30">
-    </button> <!-- Button to load series -->
+      <img src="assests/reload.svg" alt="load" width="30" height="30" />
+    </button>
 
     <button class="settings-icon" onclick="toggleMenu()">
-      <img src="setting.svg" alt="Settings" width="30" height="30">
+      <img src="assests/setting.svg" alt="Settings" width="30" height="30" />
     </button>
   </div>
 
   <div class="menu" id="menu">
     <span class="close-btn" onclick="closeMenu()">×</span>
-    <label>Email: <input type="text" id="email" placeholder="Enter email"></label>
-    <label>Password: <input type="password" id="password" placeholder="Enter password"></label>
-    <button onclick="saveCredentials()">Save</button>
+    <button onclick="githubLogin()">Login with GitHub</button>
+    <button onclick="createDisplayType()">Create Display Type</button>
   </div>
 
   <div class="series-episode-container">
     <div id="seriesList" class="series-list">
       <h2 class="container-label">Series List</h2>
-      <!-- Series will be displayed here -->
     </div>
     <div id="episodeList" class="episode-list">
       <h2 class="container-label">Episode List</h2>
-      <!-- Episodes will be displayed here -->
     </div>
   </div>
 
