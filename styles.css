@@ -176,7 +176,7 @@ select:hover {
   z-index: 20;
 }
 
-.menu input {
+/*.menu input {
   background-color: #4f545c;
   border: 1px solid #444;
   color: white;
@@ -193,7 +193,7 @@ select:hover {
   width: 100%;
   border-radius: 5px;
   cursor: pointer;
-}
+} */
 
 .menu button:hover {
   background-color: #36a164;
