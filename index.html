@@ -10,28 +10,27 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <script src="script.js"></script>
   <div class="controls-container">
     <div class="dropdowns">
       <h2>Platforms:</h2>
-      <select id="platform" onchange="loadSeries()">
+      <select id="platform">
         <option value="Lezhin">Lezhin</option>
         <option value="Manta">Manta</option>
         <option value="Tapas">Tapas</option>
         <option value="Tappytoon">Tappytoon</option>
       </select>
       <h2>Series Display:</h2>
-      <select id="displayType" onchange="loadSeries()">
+      <select id="displayType">
         <option value="All">All</option>
         <option value="Bookmarked">Bookmarked</option>
       </select>
     </div>
 
-    <button class="load" onclick="loadSeries()">
+    <button class="load">
       <img src="assets/reload.svg" alt="load" width="30" height="30">
     </button> <!-- Button to load series -->
 
-    <button class="settings-icon" onclick="toggleMenu()">
+    <button class="settings-icon">
       <img src="assets/setting.svg" alt="Settings" width="30" height="30">
     </button>
   </div>
@@ -53,5 +52,7 @@
       <!-- Episodes will be displayed here -->
     </div>
   </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
