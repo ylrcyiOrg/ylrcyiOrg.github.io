@@ -16,6 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
   
 });
 
+let email = localStorage.getItem('email') || '';
+let password = localStorage.getItem('password') || '';
+
+document.getElementById('email').value = email;
+document.getElementById('password').value = password;
+
 // Function to load series based on platform and display type
 async function loadSeries() {
   const platform = document.getElementById('platform').value;
