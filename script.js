@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 let email = localStorage.getItem('email') || '';
 let password = localStorage.getItem('password') || '';
 let currentSeriesAlias = null; // Track which series is being managed
+let currentDisplayType = null; // Track which display type is being edited
 
 document.getElementById('email').value = email;
 document.getElementById('password').value = password;
@@ -92,6 +93,9 @@ function addToDisplayType(alias, event) {
       item.innerHTML = `
         <input type="checkbox" id="type-${type}" ${isInType ? 'checked' : ''}>
         <label for="type-${type}">${type}</label>
+        <button class="edit-display-btn" onclick="editDisplayType('${type}', event)">
+          <img src="assets/edit.svg" alt="Edit" width="14" height="14">
+        </button>
       `;
       item.querySelector('input').addEventListener('change', (e) => {
         toggleSeriesInDisplayType(alias, type, e.target.checked);
@@ -102,6 +106,48 @@ function addToDisplayType(alias, event) {
   
   // Show the popup
   document.getElementById('addToPopup').style.display = 'block';
+}
+
+// Function to edit a display type
+function editDisplayType(type, event) {
+  event.stopPropagation();
+  currentDisplayType = type;
+  document.getElementById('editDisplayTypeName').value = type;
+  document.getElementById('editDisplayPopup').style.display = 'block';
+}
+
+// Function to save edited display type
+function saveEditedDisplayType() {
+  const newName = document.getElementById('editDisplayTypeName').value.trim();
+  
+  if (newName && newName !== currentDisplayType) {
+    // Rename the display type
+    if (displayTypes[currentDisplayType]) {
+      displayTypes[newName] = displayTypes[currentDisplayType];
+      delete displayTypes[currentDisplayType];
+      localStorage.setItem('displayTypes', JSON.stringify(displayTypes));
+      updateDisplayTypesDropdown();
+    }
+  }
+  
+  closeEditDisplayPopup();
+}
+
+// Function to delete current display type
+function deleteDisplayType() {
+  if (confirm(`Are you sure you want to delete the display type "${currentDisplayType}"?`)) {
+    delete displayTypes[currentDisplayType];
+    localStorage.setItem('displayTypes', JSON.stringify(displayTypes));
+    updateDisplayTypesDropdown();
+    loadSeries(); // Refresh the series list
+    closeEditDisplayPopup();
+  }
+}
+
+// Function to close edit display popup
+function closeEditDisplayPopup() {
+  document.getElementById('editDisplayPopup').style.display = 'none';
+  currentDisplayType = null;
 }
 
 // Function to toggle series in a display type
