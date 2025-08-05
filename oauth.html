@@ -1,1 +1,34 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+(async () => {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+
+  const client_id = 'Ov23liigKybkVHzWD8WC';
+  const client_secret = '7138cdcff96e18fee3ae96f65992221ecd85731c';
+
+  const res = await fetch("https://github.com/login/oauth/access_token", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ client_id, client_secret, code })
+  });
+
+  const data = await res.json();
+  const token = data.access_token;
+
+  const user = await fetch("https://api.github.com/user", {
+    headers: { Authorization: `token ${token}` }
+  });
+  const userData = await user.json();
+
+  localStorage.setItem("accessToken", token);
+  localStorage.setItem("username", userData.login);
+
+  window.location.href = "index.html";
+})();
+</script>
+</body>
+</html>
 
