@@ -15,7 +15,7 @@ a {
 
 h2 {
   font-size: 18px;
-  margin-right: 10px; /* Add some space between h2 and the select */
+  margin-right: 10px;
 }
 
 button {
@@ -48,11 +48,11 @@ button:hover {
 
 .dropdowns {
   display: flex;
-  align-items: center; /* Align dropdowns and headings properly */
+  align-items: center;
 }
 
 .dropdowns h2 {
-  margin-right: 10px; /* Space between h2 and select */
+  margin-right: 10px;
 }
 
 select {
@@ -62,18 +62,14 @@ select {
   padding: 8px 0px 8px 10px;
   border-radius: 4px;
   font-size: 14px;
-  width: 160px; /* Adjust width of selects */
+  width: 160px;
   transition: background-color 0.3s;
-  margin-right: 20px; /* Space between the selects */
-  
-  /* Remove default dropdown arrow */
+  margin-right: 20px;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  
-  /* Optional: Custom background image for the arrow */
   background-image: url('assets/custom-arrow.svg');
-  background-position: right 10px center; /* Position the custom arrow */
+  background-position: right 10px center;
   background-repeat: no-repeat;
   background-size: 16px;
 }
@@ -143,7 +139,7 @@ select:hover {
   margin-right: 5px;
 }
 
-.bookmark-btn:hover, add-to-btn:hover {
+.bookmark-btn:hover, .add-to-btn:hover {
   background-color: #444;
 }
 
