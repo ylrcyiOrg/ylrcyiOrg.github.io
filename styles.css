@@ -260,6 +260,10 @@ select:hover {
   justify-content: flex-start;
 }
 
+.series:hover, .episode:hover {
+  cursor: pointer;
+}
+
 /* Add these styles to your existing CSS */
 
 /* Add to Display Type Popup */
