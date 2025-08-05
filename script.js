@@ -61,12 +61,12 @@ async function loadEpisodes(alias) {
   const episodeListContainer = document.getElementById('episodeList');
 
 // Ensure the h2 element remains intact
-  const existingLabel = seriesListContainer.querySelector('.container-label');
+  const existingLabel = episodeListContainer.querySelector('.container-label');
   
   // Insert the new HTML without affecting the h2 element
   episodeListContainer.innerHTML = ''; // Clear existing content
   episodeListContainer.appendChild(existingLabel); // Append h2 again
-  episodeListContainer.innerHTML += seriesListHtml;
+  episodeListContainer.innerHTML += episodeListHtml;
 }
 
 async function getLezhinToken() {
