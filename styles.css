@@ -358,3 +358,56 @@ select:hover {
 .button-group button {
   flex: 1;
 }
+
+/* Edit Display Type Popup */
+.edit-display-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #2f3136;
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 30;
+}
+
+.edit-display-popup input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  background-color: #4f545c;
+  border: 1px solid #444;
+  color: white;
+  border-radius: 4px;
+}
+
+.edit-display-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: auto;
+  padding: 2px;
+  border-radius: 4px;
+}
+
+.edit-display-btn:hover {
+  background-color: #444;
+}
+
+.delete-btn {
+  background-color: #f04747 !important;
+}
+
+.delete-btn:hover {
+  background-color: #d84040 !important;
+}
+
+.display-type-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+}
