@@ -16,7 +16,7 @@ async function fetchLezhinSeries(displayType) {
   const token = await getLezhinToken();
   const response = await fetch('https://cors-anywhere.herokuapp.com/https://www.lezhinus.com/lz-api/v2/comics?limit=10000&offset=0', {
     headers: {
-      'Authorization': Bearer ${token},
+      'Authorization': 'Bearer ${token}',
       'Content-Type': 'application/json',
       'sec-ch-ua-platform': '"Chrome OS"',
       'Referer': 'https://www.lezhinus.com/en/comic/thread_never_burned',
