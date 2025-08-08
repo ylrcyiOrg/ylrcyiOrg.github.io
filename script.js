@@ -470,38 +470,19 @@ async function downloadEpisode(alias, index, displayTitle) {
   try {
     currentDownloadingEpisode = { alias, index };
     
-    // Get episode info
-    const token = await getLezhinToken();
-    const url = `https://cors-anywhere.herokuapp.com/https://www.lezhinus.com/en/comic/${alias}`;
-    
-    const response = await fetch(url, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Cookie': `_LZ_AT=${token}`
-      }
-    });
-    
-    const text = await response.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, 'text/html');
-    
-    const liElements = doc.querySelectorAll('.episodeListContents__listItem__bbqbA');
-    if (index >= liElements.length) {
+    // Get episode list from api.lezhin.com
+    const episodes = await getEpisodeList(alias);
+    if (index >= episodes.length) {
       throw new Error(`Index ${index} out of range for episode list`);
     }
     
-    const targetLi = liElements[index];
-    const aTag = targetLi.querySelector('.episodeListContentsItem__CA5Ex');
-    if (!aTag) throw new Error('Could not find episode <a> tag.');
+    const episode = episodes[index];
+    const episodeId = episode.id;
     
-    const href = aTag.getAttribute('href');
-    const epSlug = href.split('/').pop();
-    
-    // Get episode ID and other info
-    const episodeInfo = await getEpisodeInfo(alias, epSlug);
+    // Get episode info from www.lezhinus.com (still needed for comicId and other metadata)
+    const episodeInfo = await getEpisodeInfo(alias, episode.name);
     const fixTileMixing = episodeInfo.tileMixing;
     const comicId = episodeInfo.comicId;
-    const episodeId = episodeInfo.episodeId;
     const pagesNo = episodeInfo.pagesNo;
     
     // Download all pages
@@ -533,20 +514,19 @@ async function downloadEpisode(alias, index, displayTitle) {
     alert(`Download failed: ${error.message}`);
   }
 }
-
 // Function to get episode info (comicId, episodeId, etc.)
-async function getEpisodeInfo(alias, epSlug) {
+async function getEpisodeInfo(alias, episodeName) {
   const token = await getLezhinToken();
   const params = new URLSearchParams({
     platform: "web",
     store: "web",
     alias: alias,
-    name: epSlug,
+    name: episodeName,
     preload: "false",
     type: "comic_episode"
   });
 
-  const url = `https://cors-anywhere.herokuapp.com/https://www.lezhinus.com/lz-api/v2/inventory_groups/comic_viewer_k?${params}`;
+  const url = `https://www.lezhinus.com/lz-api/v2/inventory_groups/comic_viewer_k?${params}`;
   
   const response = await fetch(url, {
     headers: {
