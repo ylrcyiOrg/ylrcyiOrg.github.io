@@ -358,7 +358,7 @@ async function downloadPage(comicId, episodeId, pageNumber, fixTileMixing, displ
     updated: Math.floor(Date.now() / 1000)
   });
 
-  const url = `https://imgserving.lezhin.com/v2/comics/${comicId}/episodes/${episodeId}/contents/scrolls/${pageNumber}.webp?${params}`;
+  const url = `https://cors-anywhere.herokuapp.com/https://imgserving.lezhin.com/v2/comics/${comicId}/episodes/${episodeId}/contents/scrolls/${pageNumber}.webp?${params}`;
   
   try {
     const response = await fetch(url);
@@ -472,7 +472,7 @@ async function downloadEpisode(alias, index, displayTitle) {
     
     // Get episode info
     const token = await getLezhinToken();
-    const url = `https://www.lezhinus.com/en/comic/${alias}`;
+    const url = `https://cors-anywhere.herokuapp.com/https://www.lezhinus.com/en/comic/${alias}`;
     
     const response = await fetch(url, {
       headers: {
@@ -546,7 +546,7 @@ async function getEpisodeInfo(alias, epSlug) {
     type: "comic_episode"
   });
 
-  const url = `https://www.lezhinus.com/lz-api/v2/inventory_groups/comic_viewer_k?${params}`;
+  const url = `https://cors-anywhere.herokuapp.com/https://www.lezhinus.com/lz-api/v2/inventory_groups/comic_viewer_k?${params}`;
   
   const response = await fetch(url, {
     headers: {
@@ -608,7 +608,7 @@ async function getEpisodeList(alias) {
     'accept-encoding': 'gzip'
   };
 
-  const url = `https://api.lezhin.com/v2/contents/${alias}/all?type=comic&withExpired=false`;
+  const url = `https://cors-anywhere.herokuapp.com/https://api.lezhin.com/v2/contents/${alias}/all?type=comic&withExpired=false`;
   const response = await fetch(url, { headers: LEZHIN_HEADERS });
   const data = await response.json();
 
