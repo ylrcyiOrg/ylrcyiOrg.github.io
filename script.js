@@ -617,3 +617,60 @@ function closeMenu() {
   const menu = document.getElementById('menu');
   menu.style.display = 'none';
 }
+
+// Add these class and functions at the beginning of your script
+class G {
+  constructor(value) {
+    this.value = typeof value === 'bigint' ? value : BigInt(value);
+  }
+
+  xor(other) {
+    return new G(this.value ^ other.value);
+  }
+
+  shiftRight(bits) {
+    return new G(this.value >> BigInt(bits));
+  }
+
+  shiftLeft(bits) {
+    return new G(this.value << BigInt(bits));
+  }
+
+  and(mask) {
+    return new G(this.value & BigInt(mask));
+  }
+
+  remainder(divisor) {
+    return new G(this.value % BigInt(divisor));
+  }
+}
+
+function Se(t) {
+  return BigInt(t);
+}
+
+function seedReader(e) {
+  e = e.xor(e.shiftRight(12));
+  e = e.xor(e.shiftLeft(25).and("18446744073709551615"));
+  e = e.xor(e.shiftRight(27));
+  const state = e.and("18446744073709551615");
+  const place = e.shiftRight(32).remainder(25);
+
+  return [place.value, state];
+}
+
+function decodeId(id) {
+  let i = 0;
+  let arrays = Array.from({ length: 25 }, () => i++);
+
+  let gstate = new G(id);
+  for (let i = 0; i < 25; i++) {
+    const [place, state] = seedReader(gstate);
+    const u = arrays[i];
+    arrays[i] = arrays[Number(place)];
+    arrays[Number(place)] = u;
+    gstate = new G(state);
+  }
+
+  return arrays;
+}
