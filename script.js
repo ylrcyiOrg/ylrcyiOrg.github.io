@@ -292,7 +292,9 @@ async function loadEpisodes(alias) {
   const episodes = await getEpisodeList(alias);
   let episodeListHtml = '';
   episodes.forEach(ep => {
-    episodeListHtml += `<div class="episode">${ep.display.title}</div>`;
+    episodeListHtml += `<div class="episode"><button class="bookmark-btn" onclick="toggleBookmark('${series.alias}', event)">
+            <img src="assets/icon.svg" alt="Bookmark" class="bookmark-icon" />
+          </button>${ep.display.title}</div>`;
   });
   const episodeListContainer = document.getElementById('episodeList');
   const existingLabel = episodeListContainer.querySelector('.container-label');
