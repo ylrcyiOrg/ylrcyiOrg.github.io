@@ -225,7 +225,7 @@ function closeNewDisplayPopup() {
 // Function to fetch Lezhin series with display type filtering
 async function fetchLezhinSeries(displayType) {
   const token = await getLezhinToken();
-  const response = await fetch('https://cors-anywhere.herokuapp.com/https://www.lezhinus.com/lz-api/v2/comics?limit=10000&offset=0', {
+  const response = await fetch('http://localhost:8080/https://www.lezhinus.com/lz-api/v2/comics?limit=10000&offset=0', {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -358,7 +358,7 @@ async function downloadPage(comicId, episodeId, pageNumber, fixTileMixing, displ
     updated: Math.floor(Date.now() / 1000)
   });
 
-  const url = `https://cors-anywhere.herokuapp.com/https://imgserving.lezhin.com/v2/comics/${comicId}/episodes/${episodeId}/contents/scrolls/${pageNumber}.webp?${params}`;
+  const url = `http://localhost:8080/https://imgserving.lezhin.com/v2/comics/${comicId}/episodes/${episodeId}/contents/scrolls/${pageNumber}.webp?${params}`;
   
   try {
     const response = await fetch(url);
@@ -526,7 +526,7 @@ async function getEpisodeInfo(alias, episodeName) {
     type: "comic_episode"
   });
 
-  const url = `https://cors-anywhere.herokuapp.com/https://www.lezhinus.com/lz-api/v2/inventory_groups/comic_viewer_k?${params}`;
+  const url = `http://localhost:8080/https://www.lezhinus.com/lz-api/v2/inventory_groups/comic_viewer_k?${params}`;
   
   const response = await fetch(url, {
     headers: {
@@ -548,7 +548,7 @@ async function getEpisodeInfo(alias, episodeName) {
 // Get Lezhin token
 async function getLezhinToken() {
   if (!email || !password) return null;
-  const response = await fetch('https://cors-anywhere.herokuapp.com/https://www.lezhinus.com/api/authentication/login', {
+  const response = await fetch('http://localhost:8080/https://www.lezhinus.com/api/authentication/login', {
     method: 'POST',
     headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0', 'Accept': '*/*',
@@ -588,7 +588,7 @@ async function getEpisodeList(alias) {
     'accept-encoding': 'gzip'
   };
 
-  const url = `https://cors-anywhere.herokuapp.com/https://api.lezhin.com/v2/contents/${alias}/all?type=comic&withExpired=false`;
+  const url = `http://localhost:8080/https://api.lezhin.com/v2/contents/${alias}/all?type=comic&withExpired=false`;
   const response = await fetch(url, { headers: LEZHIN_HEADERS });
   const data = await response.json();
 
