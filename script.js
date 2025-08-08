@@ -526,7 +526,7 @@ async function getEpisodeInfo(alias, episodeName) {
     type: "comic_episode"
   });
 
-  const url = `https://www.lezhinus.com/lz-api/v2/inventory_groups/comic_viewer_k?${params}`;
+  const url = `https://cors-anywhere.herokuapp.com/https://www.lezhinus.com/lz-api/v2/inventory_groups/comic_viewer_k?${params}`;
   
   const response = await fetch(url, {
     headers: {
