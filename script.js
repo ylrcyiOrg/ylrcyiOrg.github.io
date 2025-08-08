@@ -351,6 +351,7 @@ function decodeId(id) {
 }
 
 // Function to download a single page
+// Function to download page and fix tile mixing
 async function downloadPage(comicId, episodeId, pageNumber, fixTileMixing, displayTitle) {
   const params = new URLSearchParams({
     purchased: "false",
@@ -411,6 +412,9 @@ async function downloadPage(comicId, episodeId, pageNumber, fixTileMixing, displ
         mergeCtx.drawImage(bottomCanvas, 0, 5 * tileHeight);
       }
 
+      // Debugging the output before returning the blob
+      console.log("Image after reassembling:", mergeCanvas);
+      
       return await mergeCanvas.convertToBlob({ type: 'image/jpeg', quality: 0.9 });
     } else {
       // No tile mixing needed
@@ -425,6 +429,7 @@ async function downloadPage(comicId, episodeId, pageNumber, fixTileMixing, displ
   }
 }
 
+
 // Function to create a zip file from blobs
 async function createZipFile(blobs, comicId, chapterNumber, displayTitle) {
   const zip = new JSZip();
@@ -436,18 +441,24 @@ async function createZipFile(blobs, comicId, chapterNumber, displayTitle) {
   
   const displaySegment = displayTitle ? `;display=${displayTitle}` : '';
   const zipFilename = `[@info[comic=${comicId};chapter=${chapterNumber + 1}${displaySegment}]].zip`;
-  
-  const content = await zip.generateAsync({ type: 'blob' }, (metadata) => {
-    const progress = Math.round(metadata.percent);
-    updateDownloadProgress(currentDownloadingEpisode.alias, currentDownloadingEpisode.index, progress);
-  });
-  
-  // Save the zip file
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(content);
-  link.download = zipFilename;
-  link.click();
+
+  try {
+    const content = await zip.generateAsync({ type: 'blob' }, (metadata) => {
+      const progress = Math.round(metadata.percent);
+      updateDownloadProgress(currentDownloadingEpisode.alias, currentDownloadingEpisode.index, progress);
+    });
+
+    // Save the zip file
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(content);
+    link.download = zipFilename;
+    link.click();
+  } catch (error) {
+    console.error("Error generating zip file:", error);
+    throw error;
+  }
 }
+
 
 // Function to update download progress
 function updateDownloadProgress(alias, index, progress) {
