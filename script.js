@@ -292,7 +292,7 @@ async function loadEpisodes(alias) {
   const episodes = await getEpisodeList(alias);
   let episodeListHtml = '';
   episodes.forEach(ep => {
-    episodeListHtml += `<div class="episode"><button class="bookmark-btn" onclick="toggleBookmark('${series.alias}', event)">
+    episodeListHtml += `<div class="episode"><button class="bookmark-btn">
             <img src="assets/icon.svg" alt="Bookmark" class="bookmark-icon" />
           </button>${ep.display.title}</div>`;
   });
