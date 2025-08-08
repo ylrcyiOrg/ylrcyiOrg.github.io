@@ -288,20 +288,281 @@ function toggleBookmark(alias, event) {
 }
 
 // Function to load episodes for a selected series
+// Add this to script.js
+
+// Global variables for download state
+let currentDownloadingEpisode = null;
+let downloadProgress = 0;
+
+// Modified loadEpisodes function with download buttons
 async function loadEpisodes(alias) {
   const episodes = await getEpisodeList(alias);
   let episodeListHtml = '';
-  episodes.forEach(ep => {
-    episodeListHtml += `<div class="episode"><button class="bookmark-btn">
-            <img src="assets/icon.svg" alt="Bookmark" class="bookmark-icon" />
-          </button>${ep.display.title}</div>`;
+  
+  episodes.forEach((ep, index) => {
+    episodeListHtml += `
+      <div class="episode">
+        <button class="bookmark-btn">
+          <img src="assets/icon.svg" alt="Bookmark" class="bookmark-icon" />
+        </button>
+        <span class="episode-title">${ep.display.title}</span>
+        <button class="download-btn" onclick="downloadEpisode('${alias}', ${index}, '${ep.display.title}')">
+          <img src="assets/download.svg" alt="Download" class="download-icon" />
+        </button>
+        <div class="progress-bar" id="progress-${alias}-${index}" style="display: none;">
+          <div class="progress-fill"></div>
+          <span class="progress-text">0%</span>
+        </div>
+      </div>`;
   });
+  
   const episodeListContainer = document.getElementById('episodeList');
   const existingLabel = episodeListContainer.querySelector('.container-label');
   
   episodeListContainer.innerHTML = ''; // Clear existing content
   episodeListContainer.appendChild(existingLabel); // Append h2 again
   episodeListContainer.innerHTML += episodeListHtml;
+}
+
+// Seed reader function from Python
+function seedReader(e) {
+  e = e ^ (e >> 12);
+  e = e ^ ((e << 25) & 18446744073709551615);
+  e = e ^ (e >> 27);
+
+  const state = e & 18446744073709551615;
+  const place = (e >> 32) % 25;
+
+  return { place, state };
+}
+
+// Decode ID function from Python
+function decodeId(id) {
+  const arrays = Array.from({ length: 25 }, (_, i) => i);
+  let gstate = id;
+  
+  for (let i = 0; i < 25; i++) {
+    const { place, state } = seedReader(gstate);
+    [arrays[i], arrays[place]] = [arrays[place], arrays[i]];
+    gstate = state;
+  }
+  
+  return arrays;
+}
+
+// Function to download a single page
+async function downloadPage(comicId, episodeId, pageNumber, fixTileMixing, displayTitle) {
+  const params = new URLSearchParams({
+    purchased: "false",
+    q: "40",
+    updated: Math.floor(Date.now() / 1000)
+  });
+
+  const url = `https://imgserving.lezhin.com/v2/comics/${comicId}/episodes/${episodeId}/contents/scrolls/${pageNumber}.webp?${params}`;
+  
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    
+    const blob = await response.blob();
+    const img = await createImageBitmap(blob);
+    const imgWidth = img.width;
+    const imgHeight = img.height;
+
+    if (fixTileMixing) {
+      // Handle tile mixing
+      const tileWidth = imgWidth / 5;
+      const tileHeight = imgHeight / 5;
+
+      const images = [];
+      for (let row = 0; row < 5; row++) {
+        for (let col = 0; col < 5; col++) {
+          const left = col * tileWidth;
+          const top = row * tileHeight;
+          const right = left + tileWidth;
+          const bottom = top + tileHeight;
+
+          const canvas = new OffscreenCanvas(tileWidth, tileHeight);
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, left, top, tileWidth, tileHeight, 0, 0, tileWidth, tileHeight);
+          images.push(canvas);
+        }
+      }
+
+      const matrix = decodeId(episodeId);
+      const mergeCanvas = new OffscreenCanvas(imgWidth, imgHeight);
+      const mergeCtx = mergeCanvas.getContext('2d');
+
+      for (let i = 0; i < matrix.length; i++) {
+        const matrixVal = matrix[i];
+        const left = (i % 5) * tileWidth;
+        const top = Math.floor(i / 5) * tileHeight;
+        mergeCtx.drawImage(images[matrixVal], left, top);
+      }
+
+      if (imgHeight % 5 !== 0) {
+        const bottomTileHeight = imgHeight - (5 * tileHeight);
+        const bottomCanvas = new OffscreenCanvas(imgWidth, bottomTileHeight);
+        const bottomCtx = bottomCanvas.getContext('2d');
+        bottomCtx.drawImage(img, 0, 5 * tileHeight, imgWidth, bottomTileHeight, 0, 0, imgWidth, bottomTileHeight);
+        mergeCtx.drawImage(bottomCanvas, 0, 5 * tileHeight);
+      }
+
+      return await mergeCanvas.convertToBlob({ type: 'image/jpeg', quality: 0.9 });
+    } else {
+      // No tile mixing needed
+      const canvas = new OffscreenCanvas(imgWidth, imgHeight);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      return await canvas.convertToBlob({ type: 'image/jpeg', quality: 0.9 });
+    }
+  } catch (error) {
+    console.error(`Error downloading page ${pageNumber}:`, error);
+    throw error;
+  }
+}
+
+// Function to create a zip file from blobs
+async function createZipFile(blobs, comicId, chapterNumber, displayTitle) {
+  const zip = new JSZip();
+  const folder = zip.folder(chapterNumber);
+  
+  blobs.forEach((blob, index) => {
+    folder.file(`${index + 1}.jpg`, blob);
+  });
+  
+  const displaySegment = displayTitle ? `;display=${displayTitle}` : '';
+  const zipFilename = `[@info[comic=${comicId};chapter=${chapterNumber + 1}${displaySegment}]].zip`;
+  
+  const content = await zip.generateAsync({ type: 'blob' }, (metadata) => {
+    const progress = Math.round(metadata.percent);
+    updateDownloadProgress(currentDownloadingEpisode.alias, currentDownloadingEpisode.index, progress);
+  });
+  
+  // Save the zip file
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(content);
+  link.download = zipFilename;
+  link.click();
+}
+
+// Function to update download progress
+function updateDownloadProgress(alias, index, progress) {
+  const progressBar = document.getElementById(`progress-${alias}-${index}`);
+  if (progressBar) {
+    progressBar.style.display = 'flex';
+    const progressFill = progressBar.querySelector('.progress-fill');
+    const progressText = progressBar.querySelector('.progress-text');
+    
+    progressFill.style.width = `${progress}%`;
+    progressText.textContent = `${progress}%`;
+    
+    if (progress === 100) {
+      setTimeout(() => {
+        progressBar.style.display = 'none';
+      }, 2000);
+    }
+  }
+}
+
+// Main function to download an episode
+async function downloadEpisode(alias, index, displayTitle) {
+  try {
+    currentDownloadingEpisode = { alias, index };
+    
+    // Get episode info
+    const token = await getLezhinToken();
+    const url = `https://www.lezhinus.com/en/comic/${alias}`;
+    
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Cookie': `_LZ_AT=${token}`
+      }
+    });
+    
+    const text = await response.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/html');
+    
+    const liElements = doc.querySelectorAll('.episodeListContents__listItem__bbqbA');
+    if (index >= liElements.length) {
+      throw new Error(`Index ${index} out of range for episode list`);
+    }
+    
+    const targetLi = liElements[index];
+    const aTag = targetLi.querySelector('.episodeListContentsItem__CA5Ex');
+    if (!aTag) throw new Error('Could not find episode <a> tag.');
+    
+    const href = aTag.getAttribute('href');
+    const epSlug = href.split('/').pop();
+    
+    // Get episode ID and other info
+    const episodeInfo = await getEpisodeInfo(alias, epSlug);
+    const fixTileMixing = episodeInfo.tileMixing;
+    const comicId = episodeInfo.comicId;
+    const episodeId = episodeInfo.episodeId;
+    const pagesNo = episodeInfo.pagesNo;
+    
+    // Download all pages
+    const pageBlobs = [];
+    for (let i = 1; i <= pagesNo; i++) {
+      try {
+        updateDownloadProgress(alias, index, Math.round((i / pagesNo) * 100));
+        const blob = await downloadPage(comicId, episodeId, i, fixTileMixing, displayTitle);
+        pageBlobs.push(blob);
+      } catch (error) {
+        console.error(`Error downloading page ${i}:`, error);
+        // Continue with next page even if one fails
+      }
+    }
+    
+    // Create zip file
+    await createZipFile(pageBlobs, comicId, index, displayTitle);
+    
+    // Reset downloading state
+    currentDownloadingEpisode = null;
+    updateDownloadProgress(alias, index, 100);
+    
+  } catch (error) {
+    console.error('Error downloading episode:', error);
+    if (currentDownloadingEpisode) {
+      updateDownloadProgress(currentDownloadingEpisode.alias, currentDownloadingEpisode.index, 0);
+    }
+    currentDownloadingEpisode = null;
+    alert(`Download failed: ${error.message}`);
+  }
+}
+
+// Function to get episode info (comicId, episodeId, etc.)
+async function getEpisodeInfo(alias, epSlug) {
+  const token = await getLezhinToken();
+  const params = new URLSearchParams({
+    platform: "web",
+    store: "web",
+    alias: alias,
+    name: epSlug,
+    preload: "false",
+    type: "comic_episode"
+  });
+
+  const url = `https://www.lezhinus.com/lz-api/v2/inventory_groups/comic_viewer_k?${params}`;
+  
+  const response = await fetch(url, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Cookie': `_LZ_AT=${token}`
+    }
+  });
+  
+  const data = await response.json();
+  
+  return {
+    comicId: data.data.extra.episode.idComic,
+    episodeId: data.data.extra.episode.id,
+    pagesNo: data.data.extra.episode.scroll,
+    tileMixing: data.data.extra.comic?.metadata?.imageShuffle || false
+  };
 }
 
 // Get Lezhin token
