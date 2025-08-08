@@ -370,7 +370,6 @@ async function downloadPage(comicId, episodeId, pageNumber, fixTileMixing, displ
     const imgHeight = img.height;
 
     if (fixTileMixing) {
-      // Handle tile mixing
       const tileWidth = imgWidth / 5;
       const tileHeight = imgHeight / 5;
 
@@ -389,10 +388,13 @@ async function downloadPage(comicId, episodeId, pageNumber, fixTileMixing, displ
         }
       }
 
+      // Decode the ID to shuffle the tile order
       const matrix = decodeId(episodeId);
+      console.log("Matrix for tile arrangement:", matrix); // Debugging the matrix
       const mergeCanvas = new OffscreenCanvas(imgWidth, imgHeight);
       const mergeCtx = mergeCanvas.getContext('2d');
 
+      // Reassemble the image based on decoded ID (shuffle logic)
       for (let i = 0; i < matrix.length; i++) {
         const matrixVal = matrix[i];
         const left = (i % 5) * tileWidth;
@@ -400,6 +402,7 @@ async function downloadPage(comicId, episodeId, pageNumber, fixTileMixing, displ
         mergeCtx.drawImage(images[matrixVal], left, top);
       }
 
+      // Handle the last part of the image (if the height is not divisible by 5)
       if (imgHeight % 5 !== 0) {
         const bottomTileHeight = imgHeight - (5 * tileHeight);
         const bottomCanvas = new OffscreenCanvas(imgWidth, bottomTileHeight);
